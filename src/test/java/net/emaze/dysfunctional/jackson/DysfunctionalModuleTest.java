@@ -2,12 +2,14 @@ package net.emaze.dysfunctional.jackson;
 
 import java.io.IOException;
 import net.emaze.dysfunctional.jackson.DysfunctionalModuleTest.BoxFromArrayTest;
-import net.emaze.dysfunctional.jackson.DysfunctionalModuleTest.ComposedFromArrayTest;
 import net.emaze.dysfunctional.jackson.DysfunctionalModuleTest.MaybeFromArrayTest;
-import net.emaze.dysfunctional.jackson.DysfunctionalModuleTest.MaybeFromArrayTest.Mario;
-import net.emaze.dysfunctional.jackson.DysfunctionalModuleTest.MaybeFromArrayTest.MaybeOfMaybe;
+import net.emaze.dysfunctional.jackson.DysfunctionalModuleTest.MaybeFromArrayTest.BeanWithMaybe;
+import net.emaze.dysfunctional.jackson.DysfunctionalModuleTest.MaybeToArrayTest;
 import net.emaze.dysfunctional.jackson.DysfunctionalModuleTest.PairFromArrayTest;
+import net.emaze.dysfunctional.jackson.DysfunctionalModuleTest.PairFromArrayTest.BeanWithPair;
+import net.emaze.dysfunctional.jackson.DysfunctionalModuleTest.PairToArrayTest;
 import net.emaze.dysfunctional.jackson.DysfunctionalModuleTest.TripleFromArrayTest;
+import net.emaze.dysfunctional.jackson.DysfunctionalModuleTest.ZenTest;
 import net.emaze.dysfunctional.options.Box;
 import net.emaze.dysfunctional.options.Maybe;
 import net.emaze.dysfunctional.tuples.Pair;
@@ -25,12 +27,40 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
     MaybeFromArrayTest.class,
+    MaybeToArrayTest.class,
     BoxFromArrayTest.class,
     PairFromArrayTest.class,
+    PairToArrayTest.class,
     TripleFromArrayTest.class,
-    ComposedFromArrayTest.class
+    ZenTest.class
 })
 public class DysfunctionalModuleTest {
+
+    public static class MaybeToArrayTest {
+
+        @Test
+        public void canSerialize() throws IOException {
+            final ObjectMapper mapper = new ObjectMapper();
+            mapper.registerModule(new DysfunctionalModule());
+            final BeanWithMaybe bwm = new BeanWithMaybe();
+            bwm.setInner(Maybe.just(42));
+            final String got = mapper.writeValueAsString(bwm);
+            Assert.assertTrue(got.contains("42"));
+        }
+    }
+
+    public static class PairToArrayTest {
+
+        @Test
+        public void canSerialize() throws IOException {
+            final ObjectMapper mapper = new ObjectMapper();
+            mapper.registerModule(new DysfunctionalModule());
+            final BeanWithPair bwp = new BeanWithPair();
+            bwp.setInner(Pair.of("42", 43));
+            final String got = mapper.writeValueAsString(bwp);
+            Assert.assertTrue(got.contains("\"42\"") && got.contains("43"));
+        }
+    }
 
     public static class MaybeFromArrayTest {
 
@@ -40,8 +70,8 @@ public class DysfunctionalModuleTest {
             mapper.registerModule(new DysfunctionalModule());
             //Mario bean = new Mario();
             //bean.setLuigi(Maybe.just(42));
-            Mario mario = mapper.readValue("{'luigi': [42]}".replace('\'', '"'), Mario.class);
-            Assert.assertEquals(Maybe.just(42), mario.getLuigi());
+            BeanWithMaybe mario = mapper.readValue("{'inner': [42]}".replace('\'', '"'), BeanWithMaybe.class);
+            Assert.assertEquals(Maybe.just(42), mario.getInner());
         }
 
         @Test
@@ -49,8 +79,8 @@ public class DysfunctionalModuleTest {
             ObjectMapper mapper = new ObjectMapper();
             mapper.registerModule(new DysfunctionalModule());
 
-            Outer outer = mapper.readValue("{ 'mario': [{'luigi': [42]}]}".replace('\'', '"'), Outer.class);
-            Assert.assertEquals(Maybe.just(42), outer.getMario().value().getLuigi());
+            Outer outer = mapper.readValue("{ 'mario': [{'inner': [42]}]}".replace('\'', '"'), Outer.class);
+            Assert.assertEquals(Maybe.just(42), outer.getMario().value().getInner());
         }
 
         @Test
@@ -138,27 +168,27 @@ public class DysfunctionalModuleTest {
 
         public static class Outer {
 
-            private Maybe<Mario> mario;
+            private Maybe<BeanWithMaybe> mario;
 
-            public Maybe<Mario> getMario() {
+            public Maybe<BeanWithMaybe> getMario() {
                 return mario;
             }
 
-            public void setMario(Maybe<Mario> mario) {
+            public void setMario(Maybe<BeanWithMaybe> mario) {
                 this.mario = mario;
             }
         }
 
-        public static class Mario {
+        public static class BeanWithMaybe {
 
-            private Maybe<Integer> luigi;
+            private Maybe<Integer> inner;
 
-            public Maybe<Integer> getLuigi() {
-                return luigi;
+            public Maybe<Integer> getInner() {
+                return inner;
             }
 
-            public void setLuigi(Maybe<Integer> luigi) {
-                this.luigi = luigi;
+            public void setInner(Maybe<Integer> inner) {
+                this.inner = inner;
             }
         }
     }
@@ -241,7 +271,7 @@ public class DysfunctionalModuleTest {
         }
     }
 
-    public static class ComposedFromArrayTest {
+    public static class ZenTest {
 
         @Test
         public void canDeserializeKebab() throws IOException {
