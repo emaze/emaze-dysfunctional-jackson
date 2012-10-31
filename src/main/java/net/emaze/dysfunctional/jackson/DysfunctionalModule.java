@@ -1,6 +1,7 @@
 package net.emaze.dysfunctional.jackson;
 
 import net.emaze.dysfunctional.options.Box;
+import net.emaze.dysfunctional.options.Either;
 import net.emaze.dysfunctional.options.Maybe;
 import net.emaze.dysfunctional.tuples.Pair;
 import net.emaze.dysfunctional.tuples.Triple;
@@ -20,6 +21,7 @@ public class DysfunctionalModule extends SimpleModule {
     public DysfunctionalModule() {
         super("dysfunctional-module", new Version(1, 0, 0, null));
         this.addSerializer(Maybe.class, new MaybeToArray());
+        this.addSerializer(Either.class, new EitherToArray());
         this.addSerializer(Box.class, new BoxToArray());
         this.addSerializer(Pair.class, new PairToArray());
         this.addSerializer(Triple.class, new TripleToArray());
@@ -36,6 +38,9 @@ public class DysfunctionalModule extends SimpleModule {
                 }
                 if (Box.class.isAssignableFrom(type.getRawClass())) {
                     return new BoxFromArray(type.containedType(0));
+                }
+                if (Either.class.isAssignableFrom(type.getRawClass())) {
+                    return new EitherFromArray(type.containedType(0), type.containedType(1));
                 }
                 if (Pair.class.isAssignableFrom(type.getRawClass())) {
                     return new PairFromArray(type.containedType(0), type.containedType(1));
