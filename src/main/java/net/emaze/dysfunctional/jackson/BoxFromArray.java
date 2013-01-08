@@ -1,13 +1,13 @@
 package net.emaze.dysfunctional.jackson;
 
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.JsonToken;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.JsonDeserializer;
 import java.io.IOException;
 import net.emaze.dysfunctional.options.Box;
-import org.codehaus.jackson.JsonParser;
-import org.codehaus.jackson.JsonProcessingException;
-import org.codehaus.jackson.JsonToken;
-import org.codehaus.jackson.map.DeserializationContext;
-import org.codehaus.jackson.map.JsonDeserializer;
-import org.codehaus.jackson.type.JavaType;
 
 public class BoxFromArray extends JsonDeserializer<Box<?>> {
 
@@ -22,7 +22,7 @@ public class BoxFromArray extends JsonDeserializer<Box<?>> {
         boolean hasValue = false;
         Object value = null;
         while (jp.nextToken() != JsonToken.END_ARRAY) {
-            value = ctxt.getDeserializerProvider().findValueDeserializer(ctxt.getConfig(), nestedType, null).deserialize(jp, ctxt);
+            value = ctxt.findContextualValueDeserializer(nestedType, null).deserialize(jp, ctxt);
             hasValue = true;
         }
         return hasValue ? Box.of(value) : Box.empty();

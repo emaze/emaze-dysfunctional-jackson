@@ -1,16 +1,16 @@
 package net.emaze.dysfunctional.jackson;
 
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.JsonToken;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.type.TypeFactory;
 import java.io.IOException;
 import net.emaze.dysfunctional.contracts.dbc;
 import net.emaze.dysfunctional.options.Either;
 import net.emaze.dysfunctional.options.Maybe;
-import org.codehaus.jackson.JsonParser;
-import org.codehaus.jackson.JsonProcessingException;
-import org.codehaus.jackson.JsonToken;
-import org.codehaus.jackson.map.DeserializationContext;
-import org.codehaus.jackson.map.JsonDeserializer;
-import org.codehaus.jackson.map.type.TypeFactory;
-import org.codehaus.jackson.type.JavaType;
 
 public class EitherFromArray extends JsonDeserializer<Either<?, ?>> {
 
@@ -27,9 +27,9 @@ public class EitherFromArray extends JsonDeserializer<Either<?, ?>> {
     public Either<?, ?> deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
         dbc.state(JsonToken.START_ARRAY == jp.getCurrentToken(), "expected a START_ARRAY token");
         jp.nextToken();
-        final Maybe<Object> maybeLeft = (Maybe<Object>) ctxt.getDeserializerProvider().findValueDeserializer(ctxt.getConfig(), maybeLeftType, null).deserialize(jp, ctxt);
+        final Maybe<Object> maybeLeft = (Maybe<Object>) ctxt.findContextualValueDeserializer(maybeLeftType, null).deserialize(jp, ctxt);
         jp.nextToken();
-        final Maybe<Object> maybeRight = (Maybe<Object>) ctxt.getDeserializerProvider().findValueDeserializer(ctxt.getConfig(), maybeRightType, null).deserialize(jp, ctxt);
+        final Maybe<Object> maybeRight = (Maybe<Object>) ctxt.findContextualValueDeserializer(maybeRightType, null).deserialize(jp, ctxt);
         dbc.state(JsonToken.END_ARRAY == jp.nextToken(), "expected an END_ARRAY token");
         return new Either<Object, Object>(maybeLeft, maybeRight);
     }

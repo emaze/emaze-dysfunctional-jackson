@@ -1,8 +1,8 @@
 package net.emaze.dysfunctional.jackson;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import net.emaze.dysfunctional.tuples.Pair;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Assert;
 import org.junit.Test;
 
