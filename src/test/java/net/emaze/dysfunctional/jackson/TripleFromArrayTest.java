@@ -20,6 +20,21 @@ public class TripleFromArrayTest {
         Assert.assertEquals(Triple.of("42", 42, true), bean.getInner());
     }
 
+    @Test
+    public void canDeserializeReifiedTriple() throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new DysfunctionalModule());
+        Triple<Integer, Integer, Integer> got = mapper.readValue("[42, 42, 42]", ReifiedTriple.class);
+        Assert.assertEquals(Triple.of(42, 42, 42), got);
+    }
+
+    public static class ReifiedTriple extends Triple<Integer, Integer, Integer> {
+
+        public ReifiedTriple(Integer first, Integer second, Integer third) {
+            super(first, second, third);
+        }
+    }
+
     public static class BeanWithTriple {
 
         public Triple<String, Integer, Boolean> getInner() {

@@ -20,6 +20,21 @@ public class PairFromArrayTest {
         Assert.assertEquals(Pair.of("42", 42), bean.getInner());
     }
 
+    @Test
+    public void canDeserializeReifiedPair() throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new DysfunctionalModule());
+        Pair<Integer, Integer> got = mapper.readValue("[42,42]", ReifiedPair.class);
+        Assert.assertEquals(Pair.of(42, 42), got);
+    }
+
+    public static class ReifiedPair extends Pair<Integer, Integer> {
+
+        public ReifiedPair(Integer f, Integer l) {
+            super(f, l);
+        }
+    }
+
     public static class BeanWithPair {
 
         private Pair<String, Integer> inner;

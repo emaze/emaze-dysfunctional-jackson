@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.Module.SetupContext;
 import com.fasterxml.jackson.databind.deser.Deserializers;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.databind.type.TypeFactory;
 import net.emaze.dysfunctional.options.Box;
 import net.emaze.dysfunctional.options.Either;
 import net.emaze.dysfunctional.options.Maybe;
@@ -33,19 +34,24 @@ public class DysfunctionalModule extends SimpleModule {
             @Override
             public JsonDeserializer<?> findBeanDeserializer(JavaType type, DeserializationConfig config, BeanDescription beanDesc) throws JsonMappingException {
                 if (Maybe.class.isAssignableFrom(type.getRawClass())) {
-                    return new MaybeFromArray(type.containedType(0));
+                    final JavaType[] types = TypeFactory.defaultInstance().findTypeParameters(type, Maybe.class);
+                    return new MaybeFromArray(types[0]);
                 }
                 if (Box.class.isAssignableFrom(type.getRawClass())) {
-                    return new BoxFromArray(type.containedType(0));
+                    final JavaType[] types = TypeFactory.defaultInstance().findTypeParameters(type, Box.class);
+                    return new BoxFromArray(types[0]);
                 }
                 if (Either.class.isAssignableFrom(type.getRawClass())) {
-                    return new EitherFromArray(type.containedType(0), type.containedType(1));
+                    final JavaType[] types = TypeFactory.defaultInstance().findTypeParameters(type, Either.class);
+                    return new EitherFromArray(types[0], types[1]);
                 }
                 if (Pair.class.isAssignableFrom(type.getRawClass())) {
-                    return new PairFromArray(type.containedType(0), type.containedType(1));
+                    final JavaType[] types = TypeFactory.defaultInstance().findTypeParameters(type, Pair.class);
+                    return new PairFromArray(types[0], types[1]);
                 }
                 if (Triple.class.isAssignableFrom(type.getRawClass())) {
-                    return new TripleFromArray(type.containedType(0), type.containedType(1), type.containedType(2));
+                    final JavaType[] types = TypeFactory.defaultInstance().findTypeParameters(type, Triple.class);
+                    return new TripleFromArray(types[0], types[1], types[2]);
                 }
                 return null;
             }

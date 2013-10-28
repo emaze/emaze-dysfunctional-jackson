@@ -28,6 +28,17 @@ public class BoxFromArrayTest {
         Assert.assertEquals(Box.of(42), bean.getInner());
     }
 
+    @Test
+    public void canDeserializeReifiedBox() throws IOException {
+        final ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new DysfunctionalModule());
+        Box<Integer> readValue = mapper.readValue("[42]", ReifiedBox.class);
+        Assert.assertEquals(Box.of(42), readValue);
+    }
+    
+    public static class ReifiedBox extends Box<Integer> {
+    }
+
     public static class BeanWithBox {
 
         public Box<Integer> getInner() {

@@ -3,6 +3,7 @@ package net.emaze.dysfunctional.jackson;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import net.emaze.dysfunctional.options.Either;
+import net.emaze.dysfunctional.options.Maybe;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -45,6 +46,22 @@ public class EitherFromArrayTest {
         final Either<Boolean, String> inner = Either.right("test");
         Either<Boolean, Either<Boolean, String>> expected = Either.right(inner);
         Assert.assertEquals(expected, got.getInner());
+    }
+
+    @Test
+    public void canDeserializeReifiedEither() throws IOException {
+        final ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new DysfunctionalModule());
+        Either<Integer, Integer> got = mapper.readValue("[[],[42]]", ReifiedEither.class);
+        final Either<Integer, Integer> expected = Either.right(42);
+        Assert.assertEquals(expected, got);
+    }
+
+    public static class ReifiedEither extends Either<Integer, Integer> {
+
+        public ReifiedEither(Maybe<Integer> left, Maybe<Integer> right) {
+            super(left, right);
+        }
     }
 
     public static class BeanWithEither {

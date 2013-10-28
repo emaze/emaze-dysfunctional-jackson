@@ -50,6 +50,29 @@ public class MaybeFromArrayTest {
         Assert.assertEquals(Maybe.just(Maybe.just(42)), maybeOfMaybe.getValue());
     }
 
+    @Test
+    public void canDeserializeReifiedMaybe() throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new DysfunctionalModule());
+        Maybe<Integer> refiedMaybe = mapper.readValue("[42]", RefiedMaybe.class);
+        Assert.assertEquals(Maybe.just(42), refiedMaybe);
+    }
+
+    @Test
+    public void canDeserializeReifiedMaybeNothing() throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new DysfunctionalModule());
+        Maybe<Integer> refiedMaybe = mapper.readValue("[]", RefiedMaybe.class);
+        Assert.assertEquals(Maybe.nothing(), refiedMaybe);
+    }
+
+    public static class RefiedMaybe extends Maybe<Integer> {
+
+        public RefiedMaybe(Integer element, boolean hasValue) {
+            super(element, hasValue);
+        }
+    }
+
     public static class MaybeOfMaybe {
 
         public Maybe<Maybe<Integer>> value;
@@ -132,5 +155,5 @@ public class MaybeFromArrayTest {
             this.inner = inner;
         }
     }
-    
+
 }
