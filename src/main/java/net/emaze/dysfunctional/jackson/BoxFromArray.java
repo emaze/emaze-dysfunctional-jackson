@@ -22,7 +22,7 @@ public class BoxFromArray extends JsonDeserializer<Box<?>> {
         boolean hasValue = false;
         Object value = null;
         while (jp.nextToken() != JsonToken.END_ARRAY) {
-            value = ctxt.findContextualValueDeserializer(nestedType, null).deserialize(jp, ctxt);
+            value = jp.getCurrentToken() == JsonToken.VALUE_NULL ? null : ctxt.findContextualValueDeserializer(nestedType, null).deserialize(jp, ctxt);
             hasValue = true;
         }
         return hasValue ? Box.of(value) : Box.empty();

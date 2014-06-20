@@ -29,6 +29,14 @@ public class BoxFromArrayTest {
     }
 
     @Test
+    public void boxFilledWithNull() throws IOException {
+        final ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new DysfunctionalModule());
+        final BeanWithBox bean = mapper.readValue("{'inner': [null]}".replace('\'', '"'), BeanWithBox.class);
+        Assert.assertEquals(Box.of(null), bean.getInner());
+    }
+
+    @Test
     public void canDeserializeReifiedBox() throws IOException {
         final ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new DysfunctionalModule());

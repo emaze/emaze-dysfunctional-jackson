@@ -21,6 +21,30 @@ public class PairFromArrayTest {
     }
 
     @Test
+    public void canDeserializeNullOnLeft() throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new DysfunctionalModule());
+        BeanWithPair bean = mapper.readValue("{'inner':[null,42]}".replace('\'', '"'), BeanWithPair.class);
+        Assert.assertEquals(Pair.of(null, 42), bean.getInner());
+    }
+
+    @Test
+    public void canDeserializeNullOnRight() throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new DysfunctionalModule());
+        BeanWithPair bean = mapper.readValue("{'inner':['42',null]}".replace('\'', '"'), BeanWithPair.class);
+        Assert.assertEquals(Pair.of("42", null), bean.getInner());
+    }
+
+    @Test
+    public void canDeserializeNullOnBoth() throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new DysfunctionalModule());
+        BeanWithPair bean = mapper.readValue("{'inner':[null,null]}".replace('\'', '"'), BeanWithPair.class);
+        Assert.assertEquals(Pair.of(null, null), bean.getInner());
+    }
+
+    @Test
     public void canDeserializeReifiedPair() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new DysfunctionalModule());

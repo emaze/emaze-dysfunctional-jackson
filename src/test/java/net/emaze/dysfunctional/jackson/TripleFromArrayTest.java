@@ -21,6 +21,38 @@ public class TripleFromArrayTest {
     }
 
     @Test
+    public void canDeserializeNullOnFirst() throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new DysfunctionalModule());
+        BeanWithTriple bean = mapper.readValue("{'inner':[null,42, true]}".replace('\'', '"'), BeanWithTriple.class);
+        Assert.assertEquals(Triple.of(null, 42, true), bean.getInner());
+    }
+
+    @Test
+    public void canDeserializeNullOnSecond() throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new DysfunctionalModule());
+        BeanWithTriple bean = mapper.readValue("{'inner':['42',null, true]}".replace('\'', '"'), BeanWithTriple.class);
+        Assert.assertEquals(Triple.of("42", null, true), bean.getInner());
+    }
+
+    @Test
+    public void canDeserializeNullOnThird() throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new DysfunctionalModule());
+        BeanWithTriple bean = mapper.readValue("{'inner':['42',42, null]}".replace('\'', '"'), BeanWithTriple.class);
+        Assert.assertEquals(Triple.of("42", 42, null), bean.getInner());
+    }
+
+    @Test
+    public void canDeserializeNullOnAll() throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new DysfunctionalModule());
+        BeanWithTriple bean = mapper.readValue("{'inner':[null,null, null]}".replace('\'', '"'), BeanWithTriple.class);
+        Assert.assertEquals(Triple.of(null, null, null), bean.getInner());
+    }
+
+    @Test
     public void canDeserializeReifiedTriple() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new DysfunctionalModule());

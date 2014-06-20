@@ -24,9 +24,9 @@ public class PairFromArray extends JsonDeserializer<Pair<?, ?>> {
     public Pair<?, ?> deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
         dbc.state(JsonToken.START_ARRAY == jp.getCurrentToken(), "expected a START_ARRAY token");
         jp.nextToken();
-        final Object firstValue = ctxt.findContextualValueDeserializer(firstType, null).deserialize(jp, ctxt);
+        final Object firstValue = jp.getCurrentToken() == JsonToken.VALUE_NULL ? null : ctxt.findContextualValueDeserializer(firstType, null).deserialize(jp, ctxt);
         jp.nextToken();
-        final Object secondValue = ctxt.findContextualValueDeserializer(secondType, null).deserialize(jp, ctxt);
+        final Object secondValue = jp.getCurrentToken() == JsonToken.VALUE_NULL ? null : ctxt.findContextualValueDeserializer(secondType, null).deserialize(jp, ctxt);
         dbc.state(JsonToken.END_ARRAY == jp.nextToken(), "expected an END_ARRAY token");
         return Pair.of(firstValue, secondValue);
     }

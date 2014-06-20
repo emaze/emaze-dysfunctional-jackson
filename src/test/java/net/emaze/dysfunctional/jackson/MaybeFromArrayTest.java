@@ -17,6 +17,14 @@ public class MaybeFromArrayTest {
     }
 
     @Test
+    public void worksForNull() throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new DysfunctionalModule());
+        BeanWithMaybe bean = mapper.readValue("{'inner': [null]}".replace('\'', '"'), BeanWithMaybe.class);
+        Assert.assertEquals(Maybe.just(null), bean.getInner());
+    }
+
+    @Test
     public void isReentrant() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new DysfunctionalModule());

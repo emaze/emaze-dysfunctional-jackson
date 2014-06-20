@@ -26,11 +26,11 @@ public class TripleFromArray extends JsonDeserializer<Triple<?, ?, ?>> {
     public Triple<?, ?, ?> deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
         dbc.state(JsonToken.START_ARRAY == jp.getCurrentToken(), "expected a START_ARRAY token");
         jp.nextToken();
-        final Object firstValue = ctxt.findContextualValueDeserializer(firstType, null).deserialize(jp, ctxt);
+        final Object firstValue = jp.getCurrentToken() == JsonToken.VALUE_NULL ? null : ctxt.findContextualValueDeserializer(firstType, null).deserialize(jp, ctxt);
         jp.nextToken();
-        final Object secondValue = ctxt.findContextualValueDeserializer(secondType, null).deserialize(jp, ctxt);
+        final Object secondValue = jp.getCurrentToken() == JsonToken.VALUE_NULL ? null : ctxt.findContextualValueDeserializer(secondType, null).deserialize(jp, ctxt);
         jp.nextToken();
-        final Object thirdValue = ctxt.findContextualValueDeserializer(thirdType, null).deserialize(jp, ctxt);
+        final Object thirdValue = jp.getCurrentToken() == JsonToken.VALUE_NULL ? null : ctxt.findContextualValueDeserializer(thirdType, null).deserialize(jp, ctxt);
         dbc.state(JsonToken.END_ARRAY == jp.nextToken(), "expected an END_ARRAY token");
         return Triple.of(firstValue, secondValue, thirdValue);
     }
