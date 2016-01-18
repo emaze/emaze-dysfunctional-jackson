@@ -23,13 +23,13 @@ public class RangeTest {
         final ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new DysfunctionalModule());
         mapper.registerModule(new RangeModule<Integer>(RANGES, Integer.class));
-        
+
         final Range<Integer> sourceRange = RANGES.closed(1, 3);
         final RangeBean source = RangeBean.of(sourceRange);
         final RangeBean got = mapper.readValue(mapper.writeValueAsString(source), RangeBean.class);
         Assert.assertEquals(sourceRange, got.getInner());
     }
-    
+
     @Test
     public void canDeserialize() throws IOException {
         final ObjectMapper mapper = new ObjectMapper();
