@@ -14,7 +14,7 @@
         <dependency>
             <groupId>net.emaze</groupId>
             <artifactId>emaze-dysfunctional</artifactId>
-            <version>5.3</version>
+            <version>5.5</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
