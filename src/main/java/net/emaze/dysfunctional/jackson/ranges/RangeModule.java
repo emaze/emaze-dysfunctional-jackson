@@ -31,11 +31,16 @@ public class RangeModule<T> extends SimpleModule {
     }
 
     @Override
+    public Object getTypeId() {
+        return String.format("%s-%s", getClass().getName(), typeParameter.getCanonicalName());
+    }
+
+    @Override
     public void setupModule(SetupContext context) {
         context.addSerializers(new Serializers.Base() {
             @Override
             public JsonSerializer<?> findSerializer(SerializationConfig config, JavaType type, BeanDescription beanDesc) {
-                if (Range.class.isAssignableFrom(type.getRawClass()) && type.containedType(0).hasRawClass(typeParameter)) {
+                if (Range.class.isAssignableFrom(type.getRawClass())) {
                     return new RangeToHash();
                 }
                 return null;
