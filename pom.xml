@@ -27,4 +27,8 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+    <scm>
+        <developerConnection>scm:git:file://${basedir}</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
 </project>
