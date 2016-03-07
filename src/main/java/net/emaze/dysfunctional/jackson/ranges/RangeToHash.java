@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import java.io.IOException;
 import java.util.List;
+import net.emaze.dysfunctional.Options.Maybes;
 import net.emaze.dysfunctional.ranges.Range;
 
 public class RangeToHash extends JsonSerializer<Range> {
@@ -18,7 +19,7 @@ public class RangeToHash extends JsonSerializer<Range> {
             jgen.writeFieldName("b");
             jgen.writeObject(range.begin());
             jgen.writeFieldName("e");
-            jgen.writeObject(range.end());
+            jgen.writeObject(Maybes.toMaybe(range.end()));
             jgen.writeEndObject();
         }
         jgen.writeEndArray();

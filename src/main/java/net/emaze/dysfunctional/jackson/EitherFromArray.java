@@ -31,6 +31,6 @@ public class EitherFromArray extends JsonDeserializer<Either<?, ?>> {
         jp.nextToken();
         final Maybe<Object> maybeRight = (Maybe<Object>) ctxt.findContextualValueDeserializer(maybeRightType, null).deserialize(jp, ctxt);
         dbc.state(JsonToken.END_ARRAY == jp.nextToken(), "expected an END_ARRAY token");
-        return new Either<Object, Object>(maybeLeft, maybeRight);
+        return new Either<>(maybeLeft.optional(), maybeRight.optional());
     }
 }

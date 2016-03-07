@@ -12,7 +12,7 @@ public class BoxToArray extends JsonSerializer<Box> {
     @Override
     public void serialize(Box value, JsonGenerator jgen, SerializerProvider provider) throws IOException, JsonProcessingException {
         jgen.writeStartArray();
-        if (value.hasContent()) {
+        if (value.isPresent()) {
             jgen.writeObject(value.getContent());
         }
         jgen.writeEndArray();

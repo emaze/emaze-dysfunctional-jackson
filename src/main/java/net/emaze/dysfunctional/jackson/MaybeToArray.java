@@ -12,8 +12,8 @@ public class MaybeToArray extends JsonSerializer<Maybe> {
     @Override
     public void serialize(Maybe value, JsonGenerator jgen, SerializerProvider provider) throws IOException, JsonProcessingException {
         jgen.writeStartArray();
-        if (value.hasValue()) {
-            jgen.writeObject(value.value());
+        if (value.isPresent()) {
+            jgen.writeObject(value.get());
         }
         jgen.writeEndArray();
     }

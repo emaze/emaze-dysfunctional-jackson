@@ -25,18 +25,19 @@ public class RangeFromHash<T> extends JsonDeserializer<Range<T>> {
 
     @Override
     public Range<T> deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
-        final JavaType containedType = ctxt.getTypeFactory().constructParametricType(DenseRangeSerializedForm.class, nestedType);
+        final JavaType containedType = ctxt.getTypeFactory().constructParametrizedType(DenseRangeSerializedForm.class, DenseRangeSerializedForm.class, nestedType);
         final JavaType serializedType = ctxt.getTypeFactory().constructCollectionType(ArrayList.class, containedType);
         final List<DenseRangeSerializedForm<T>> serializedValue = (List<DenseRangeSerializedForm<T>>) ctxt.findContextualValueDeserializer(serializedType, null).deserialize(jp, ctxt);
         final Iterator<DenseRangeSerializedForm<T>> iterator = serializedValue.iterator();
         final DenseRangeSerializedForm<T> first = iterator.next();
-        Range<T> range = ranges.rightHalfOpen(first.b, first.e);
+        Range<T> range = ranges.rightHalfOpen(first.b, first.e.optional());
         while (iterator.hasNext()) {
             final DenseRangeSerializedForm<T> current = iterator.next();
-            range = ranges.union(range, ranges.rightHalfOpen(current.b, current.e));
+            range = ranges.union(range, ranges.rightHalfOpen(current.b, current.e.optional()));
         }
         return range;
     }
+
     public static class DenseRangeSerializedForm<T> {
 
         private T b;

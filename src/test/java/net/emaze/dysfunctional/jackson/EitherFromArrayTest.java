@@ -2,8 +2,8 @@ package net.emaze.dysfunctional.jackson;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
+import java.util.Optional;
 import net.emaze.dysfunctional.options.Either;
-import net.emaze.dysfunctional.options.Maybe;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -59,7 +59,7 @@ public class EitherFromArrayTest {
 
     public static class ReifiedEither extends Either<Integer, Integer> {
 
-        public ReifiedEither(Maybe<Integer> left, Maybe<Integer> right) {
+        public ReifiedEither(Optional<Integer> left, Optional<Integer> right) {
             super(left, right);
         }
     }

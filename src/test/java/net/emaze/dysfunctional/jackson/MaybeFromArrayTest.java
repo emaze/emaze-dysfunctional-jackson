@@ -29,7 +29,7 @@ public class MaybeFromArrayTest {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new DysfunctionalModule());
         Outer outer = mapper.readValue("{ 'mario': [{'inner': [42]}]}".replace('\'', '"'), Outer.class);
-        Assert.assertEquals(Maybe.just(42), outer.getMario().value().getInner());
+        Assert.assertEquals(Maybe.just(42), outer.getMario().get().getInner());
     }
 
     @Test
