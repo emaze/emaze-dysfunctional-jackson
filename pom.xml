@@ -8,7 +8,7 @@
     </parent>
     <groupId>net.emaze</groupId>
     <artifactId>emaze-dysfunctional-jackson</artifactId>
-    <version>8.1.0</version>
+    <version>8.1.1-SNAPSHOT</version>
     <name>emaze-dysfunctional-jackson</name>
     <dependencies>
         <dependency>
@@ -27,8 +27,4 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-  <scm>
-    <tag>8.1.0</tag>
-  </scm>
 </project>
