@@ -1,15 +1,22 @@
 <?xml version="1.0"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>net.emaze</groupId>
-        <artifactId>emaze-parent</artifactId>
-        <version>3.2</version>
-    </parent>
     <groupId>net.emaze</groupId>
     <artifactId>emaze-dysfunctional-jackson</artifactId>
     <version>8.1.1-SNAPSHOT</version>
     <name>emaze-dysfunctional-jackson</name>
+    <description>Jackson support for emaze-dysfunctional DTOs</description>
+    <url>https://github.com/emaze/emaze-dysfunctional-jackson</url>
+    <licenses>
+        <license>
+            <name>CC BY-SA 4.0</name>
+            <url>https://creativecommons.org/licenses/by-sa/4.0/</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>net.emaze</groupId>
@@ -24,7 +31,60 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
+            <version>4.12</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.5.1</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.0.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>1.6</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+    <developers>
+        <developer>
+            <id>emaze-dev</id>
+            <name>Emaze Developers</name>
+            <email>dev@emaze.net</email>
+        </developer>
+    </developers>
+    <scm>
+        <url>https://github.com/emaze/emaze-dysfunctional-jackson</url>
+        <developerConnection>scm:git:file://${basedir}</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
 </project>
