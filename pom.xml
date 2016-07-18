@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.emaze</groupId>
     <artifactId>emaze-dysfunctional-jackson</artifactId>
-    <version>8.1.1</version>
+    <version>8.1.2-SNAPSHOT</version>
     <name>emaze-dysfunctional-jackson</name>
     <description>Jackson support for emaze-dysfunctional DTOs</description>
     <url>https://github.com/emaze/emaze-dysfunctional-jackson</url>
@@ -101,6 +101,6 @@
     <scm>
         <url>https://github.com/emaze/emaze-dysfunctional-jackson</url>
         <developerConnection>scm:git:file://${basedir}</developerConnection>
-        <tag>8.1.1</tag>
+        <tag>HEAD</tag>
     </scm>
 </project>
